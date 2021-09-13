@@ -79,7 +79,8 @@ if(logoutBtn) logoutBtn.addEventListener('click',logout)
 const updateSettings = async (data , type) =>{
     try{
         console.log('ggggggggggggg');
-        const url = type === 'password' ? 'http://localhost:3000/api/v1/users/updateMyPassword' : 
+        const url = type === 'password' ? 
+        'http://localhost:3000/api/v1/users/updateMyPassword' : 
         'http://localhost:3000/api/v1/users/updateme' 
         const res = await axios({
             method:'PATCH',
@@ -97,10 +98,17 @@ const updateSettings = async (data , type) =>{
 if(userDataForm){
     userDataForm.addEventListener('submit',(e)=>{
         e.preventDefault()
-        const email = document.getElementById('email').value
+        const form = new FormData()
         const name = document.getElementById('name').value
-        console.log(email,name);
-        updateSettings({name,email},'data')
+        const email = document.getElementById('email').value
+        const photo = document.getElementById('photo').files[0]
+        form.append('name', name)
+        form.append('email', email)
+        form.append('photo', photo)
+
+        console.log(form)
+
+        updateSettings(form,'data')
     })
 }
 

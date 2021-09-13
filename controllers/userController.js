@@ -37,11 +37,19 @@ const upload = multer({
 })
 exports.uploadUserPhoto = upload.single('photo')
 
-exports.resizeUserPhoto = (req , res, next)=>{ 
+exports.resizeUserPhoto = catchAsync( async (req , res, next)=>{ 
     if(!req.file) return next()
-    console.log(req.file.buffer);
-    sharp(req.file.buffer)
-}
+
+    req.file.filename = `user-${req.user.id}-${Date.now()}.jpeg`
+
+    await sharp(req.file.buffer)
+    .resize(500,500)
+    .toFormat('jpeg')
+    .jpeg({quality:90})
+    .toFile(`public/img/users/${req.file.filename}`)
+
+    next()
+})
 
 const filteredData = (obj , ...filteredUserData)=>{
     const filteredObject = {}
@@ -56,7 +64,7 @@ const filteredData = (obj , ...filteredUserData)=>{
     for(let i= 0 ; i< kys.length; i++){
         if(filteredUserData.includes(kys[i])) filteredObject[kys[i]] = obj[kys[i]]
     }
-    console.log(filteredObject);
+
     return filteredObject
 }
 
@@ -101,7 +109,7 @@ exports.createUser = (req,res)=>{
 }
 
 exports.updateMe = catchAsync( async(req,res,next)=>{
-    console.log(req.file);
+
     // 1) create err if user POSTs password data
     if(req.body.password || req.body.passwordConfirmed){
         return next(new AppError("This route is not for password updates. Please use updateMyPassword route.",400))

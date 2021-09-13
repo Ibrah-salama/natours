@@ -33,16 +33,20 @@ router.route('/distances/:latlng/unit/:unit').get(tourController.getDistance)
             // protect getAllTour route to check if the user is logged in or not....
 router.route('/')
     .get(tourController.getAllTours)
-    .post(authController.protect,
+    .post(
+          authController.protect,
           authController.restrictTo('admin','lead-guide'),
-          tourController.createTour
-          )
+          tourController.createTour)
 
 router.route('/:id')
     .get(tourController.getTour)
-    .patch(authController.protect,
+    .patch(
+        authController.protect,
         authController.restrictTo('admin','lead-guide'),
-        tourController.updateTour)
+        tourController.uploadTourImages,
+        tourController.resizeTourImages,
+        tourController.updateTour
+    )
     .delete(authController.protect , authController.restrictTo('admin','lead-tours'), tourController.deleteTour)
 
 // router.route('/:tourId/review').post(authController.protect,authController.restrictTo('user'),reviewController.createReview)
