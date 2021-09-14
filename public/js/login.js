@@ -78,7 +78,6 @@ if(logoutBtn) logoutBtn.addEventListener('click',logout)
 // type is either password or data 
 const updateSettings = async (data , type) =>{
     try{
-        console.log('ggggggggggggg');
         const url = type === 'password' ? 
         'http://localhost:3000/api/v1/users/updateMyPassword' : 
         'http://localhost:3000/api/v1/users/updateme' 
@@ -128,5 +127,33 @@ if(userPasswordForm){
         document.getElementById('password-current').value =''
         document.getElementById('password').value =''
         document.getElementById('password-confirm').value = ''
+    })
+}
+
+
+/// stripe
+const bookBtn =document.getElementById('book-tour')
+
+const stripe = Stripe('pk_test_51JZSMUHBP0t2rx9eWQiWnV6Gxooo5W1xJVovNpiDOECXQaikNoy4aNntGRAShYZXrX7QuWkU1PkkAWqeiYQbxRkw00Y29Rt3Fa')
+
+const bookTour = async tourId => {
+    try {// 1) get checkout session from API 
+    const session = await axios.get(`http://localhost:3000/api/v1/bookings/checkout-session/${tourId}`)
+    console.log(session)
+    // 2) create checkout form + charge credit card 
+    await stripe.redirectToCheckout({
+        sessionId: session.data.session.id
+    })}catch(err){
+        console.log(err)
+        showAlert('err'.err)
+    }
+}
+
+if(bookBtn){
+    bookBtn.addEventListener('click',e=>{
+        e.target.textContent = 'Processing...'
+        console.log('proceesssing')
+        const tourId = e.target.dataset.tourId;
+        bookTour(tourId); 
     })
 }

@@ -4,7 +4,8 @@ const UserModel = require('./../models/userModel')
 const catchAsync = require('./../util/catchAsync')
 const jwt = require('jsonwebtoken')
 const AppError = require('../util/AppError')
-const sendEmail = require('../util/email')
+const Email = require('../util/email')
+// const sendEmail = require('../util/email')
 
 const signToken = id =>{ 
     return jwt.sign({ id },process.env.JWT_SECRET,{expiresIn: process.env.JWT_EXPIRES_IN})
@@ -43,6 +44,8 @@ exports.signUp = catchAsync(async(req,res,next)=>{
         passwordConfirmed: req.body.passwordConfirmed,
         role: req.body.role
     })
+    const url = `${req.protocol}://${req.get('host')}/me`
+    await new Email(newUser , url).sendWelcom();
     createAndSendToken(newUser,201,res)
     // const token = signToken(newUser._id)
     // res.status(201).json({
@@ -154,16 +157,17 @@ exports.forgotPassword = catchAsync( async(req,res,next)=>{
     // 3) send resetToken to user email address 
     const resetURL = `${req.protocol}://${req.get('host')}/api/v1/users/resetPassword/${resetToken}`
 
-    const message = `Forgot your password? \n Please Submit a PAtch request with your
-    new password and confirmpassword to: \n ${resetURL}. \n 
-    If you did not forget your password, please ignore this email`
+    // const message = `Forgot your password? \n Please Submit a PAtch request with your
+    // new password and confirmpassword to: \n ${resetURL}. \n 
+    // If you did not forget your password, please ignore this email`
     
     try{
-        await sendEmail({
-            email:user.email,
-            subject:'your password reset token valid for 10 min',
-            message: message
-        })
+        // await sendEmail({
+        //     email:user.email,
+        //     subject:'your password reset token valid for 10 min',
+        //     message: message
+        // })
+        await new Email(user,resetURL).sendPasswordReset();
         res.status(200).json({
             status:'success',
             message:'Token sent to email.'
