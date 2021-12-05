@@ -31,13 +31,6 @@ const reviewSchema = mongoose.Schema({
 })
 
 reviewSchema.pre(/^find/,function(next){
-    // this.populate({
-    //     path:'tour',
-    //     select: 'name'
-    // }).populate({
-    //     path:'user',
-    //     select: 'name photo'
-    // })
     this.populate({
         path:'user',
         select: 'name photo'
@@ -45,11 +38,8 @@ reviewSchema.pre(/^find/,function(next){
     next()
 })
 
-// preventing the dublication of reviews by using indexes
 reviewSchema.index({ tour:1 , user:1 },{ unique:true })
 
-
-//Calculating rating average of all reviews to a specific tour 
 reviewSchema.statics.calcAverageRatig = async function(tourId){
     const stats = await this.aggregate([
         { $match : {tour:tourId}},
@@ -76,18 +66,15 @@ reviewSchema.statics.calcAverageRatig = async function(tourId){
 }
 
 reviewSchema.post('save', function(){
-    // this points to the current review
     this.constructor.calcAverageRatig(this.tour)
 })
 
-// Calculating avgRating in updating reviews
 reviewSchema.pre(/^findOneAnd/, async function(next){
     this.r = await this.findOne()
     next()
 })
 
 reviewSchema.post(/^findOneAnd/, async function(){
-    //await this.findOne() does not work here, as the query has already executed
     await this.r.constructor.calcAverageRatig(this.r.tour)
 })
 
