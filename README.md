@@ -37,10 +37,16 @@ NodeJs, Express and MongoDB
 
 
 ### Deploying / Publishing
-give instructions on how to build and release a new version
-In case there's some step you have to take that publishes this project to a
-server, this is the right time to state it.
+Heroku:
 
+Test API : [API](https://sleepy-depths-27368.herokuapp.com/api/v1) 
+
+ex: 
+* tours
+* users
+
+view: 
+Test view: [Natours](https://sleepy-depths-27368.herokuapp.com/)
 
 ## Api Reference
 
