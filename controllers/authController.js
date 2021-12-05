@@ -54,7 +54,7 @@ exports.logIn = catchAsync(async (req, res, next) => {
   // 2) check if user exist and password correct
   const user = await UserModel.findOne({ email }).select("+password");
   const correct = await user.correctPassword(password, user.password);
-  console.log(correct);
+//   console.log(correct);
   if (!user || !correct) {
     return next(new AppError("Incorrect email or password", 401));
   }
@@ -84,7 +84,7 @@ exports.protect = catchAsync(async (req, res, next) => {
     token,
     process.env.JWT_SECRET
   );
-  console.log(decodedData);
+//   console.log(decodedData);
 
   // 3) Check if the user still exists [ If the user alterd after verification]
   const currentUser = await UserModel.findById(decodedData.id);
@@ -200,9 +200,9 @@ exports.resetPassword = catchAsync(async (req, res, next) => {
     return next(new AppError("Token is invalid or expired", 400));
   }
 
-  console.log("Before =========> user");
-  console.log(user);
-  console.log("After  =========> user");
+//   console.log("Before =========> user");
+//   console.log(user);
+//   console.log("After  =========> user");
 
   user.password = req.body.password;
   user.passwordConfirmed = req.body.passwordConfirmed;
@@ -223,7 +223,7 @@ exports.updatePassword = catchAsync(async (req, res, next) => {
     passwordCurrent,
     user.password
   );
-  console.log(correctedPassword);
+//   console.log(correctedPassword);
   if (!correctedPassword)
     return next(new AppError("Your current password is incorrect", 400));
   user.password = req.body.password;

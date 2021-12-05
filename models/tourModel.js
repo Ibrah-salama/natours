@@ -124,12 +124,12 @@ tourSchema.pre("save", function (next) {
 });
 
 tourSchema.pre("save", function (next) {
-  console.log("Will save document....");
+//   console.log("Will save document....");
   next();
 });
 
 tourSchema.post("save", function (doc, next) {
-  console.log(doc);
+//   console.log(doc);
   next();
 });
 
@@ -159,7 +159,7 @@ tourSchema.pre(/^find/, function (next) {
 });
 
 tourSchema.post(/^find/, function (docs, next) {
-  console.log(`Query took ${Date.now() - this.start} Milliseconds `);
+//   console.log(`Query took ${Date.now() - this.start} Milliseconds `);
   next();
 });
 

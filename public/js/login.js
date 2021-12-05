@@ -8,9 +8,7 @@ const hideAlert = () =>{
 const showAlert = (type,message)=>{
     hideAlert()
     const markup = `<div class="alert alert--${type}">${message}</div>`
-    console.log(markup);
     document.querySelector('body').insertAdjacentHTML('afterbegin',markup)
-    console.log(markup);
     window.setTimeout(hideAlert,5000)
 }
 
@@ -19,17 +17,15 @@ const loginForm = document.querySelector('.form--login')
 
 
 const login = async (email,password)=>{
-   console.log(email, password);
    try{
        const res = await axios({
            method:'POST',
-           url:'http://localhost:3000/api/v1/users/login',
+           url:'/api/v1/users/login',
            data:{
                email,
                password
             }
         })
-        console.log(email, password);
     if(res.data.status === 'success'){
         showAlert('success','Logged in successfully')
         window.setTimeout(()=>{
@@ -54,15 +50,12 @@ const logout = async () =>{
     try{
         const res = await axios({
             method:'GET',
-            url:'http://localhost:3000/api/v1/users/logout'
+            url:'/api/v1/users/logout'
          })
-         console.log('llllllllllllllllll', await res.data.status);
          if(res.data.status = 'success'){
              location.reload(true)
          }
     }catch(err){
-        console.log(res.data.status);
-        console.log(err.message);
         showAlert('error','Error loogging out! try again')
     }
 }
@@ -74,13 +67,11 @@ const userPasswordForm = document.querySelector('.form-user-password')
 const logoutBtn = document.querySelector('.nav__el--logout')
 if(logoutBtn) logoutBtn.addEventListener('click',logout)
 
-// update user data 
-// type is either password or data 
 const updateSettings = async (data , type) =>{
     try{
         const url = type === 'password' ? 
-        'http://localhost:3000/api/v1/users/updateMyPassword' : 
-        'http://localhost:3000/api/v1/users/updateme' 
+        '/api/v1/users/updateMyPassword' : 
+        '/api/v1/users/updateme' 
         const res = await axios({
             method:'PATCH',
             url,
@@ -104,9 +95,6 @@ if(userDataForm){
         form.append('name', name)
         form.append('email', email)
         form.append('photo', photo)
-
-        console.log(form)
-
         updateSettings(form,'data')
     })
 }
@@ -141,15 +129,15 @@ const bookTour = async (tourId) => {
   try {
     // 1) get checkout session from API
     const session = await axios.get(
-      `http://localhost:3000/api/v1/bookings/checkout-session/${tourId}`
+      `/api/v1/bookings/checkout-session/${tourId}`
     );
     // 2) create checkout form + charge credit card
-    console.log(session)
+    // console.log(session)
     await stripe.redirectToCheckout({
       sessionId: session.data.session.id,
     });
   } catch (err) {
-    console.log(err);
+    // console.log(err);
     showAlert("err".err);
   }
 };
@@ -157,7 +145,6 @@ const bookTour = async (tourId) => {
 if (bookBtn) {
   bookBtn.addEventListener("click", (e) => {
     e.target.textContent = "Processing...";
-    console.log("heeeere")
     const tourId = e.target.dataset.tourId;
     bookTour(tourId);
   });
