@@ -1,5 +1,3 @@
-<img src="./images/logo.sample.png" alt="Logo of the project" align="right">
-
 # Natours
 
 An application showin information about tours, and helping users to booking their tour
