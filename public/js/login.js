@@ -61,7 +61,7 @@ const logout = async () =>{
              location.reload(true)
          }
     }catch(err){
-        console.log('KKKKKKKKKKKKKKKKKKKKK', res.data.status);
+        console.log(res.data.status);
         console.log(err.message);
         showAlert('error','Error loogging out! try again')
     }
@@ -130,30 +130,35 @@ if(userPasswordForm){
     })
 }
 
-
 /// stripe
-const bookBtn =document.getElementById('book-tour')
+const bookBtn = document.getElementById("book-tour");
 
-const stripe = Stripe('pk_test_51JZSMUHBP0t2rx9eWQiWnV6Gxooo5W1xJVovNpiDOECXQaikNoy4aNntGRAShYZXrX7QuWkU1PkkAWqeiYQbxRkw00Y29Rt3Fa')
+const stripe = Stripe(
+  "pk_test_51JZSMUHBP0t2rx9eWQiWnV6Gxooo5W1xJVovNpiDOECXQaikNoy4aNntGRAShYZXrX7QuWkU1PkkAWqeiYQbxRkw00Y29Rt3Fa"
+);
 
-const bookTour = async tourId => {
-    try {// 1) get checkout session from API 
-    const session = await axios.get(`http://localhost:3000/api/v1/bookings/checkout-session/${tourId}`)
+const bookTour = async (tourId) => {
+  try {
+    // 1) get checkout session from API
+    const session = await axios.get(
+      `http://localhost:3000/api/v1/bookings/checkout-session/${tourId}`
+    );
+    // 2) create checkout form + charge credit card
     console.log(session)
-    // 2) create checkout form + charge credit card 
     await stripe.redirectToCheckout({
-        sessionId: session.data.session.id
-    })}catch(err){
-        console.log(err)
-        showAlert('err'.err)
-    }
-}
+      sessionId: session.data.session.id,
+    });
+  } catch (err) {
+    console.log(err);
+    showAlert("err".err);
+  }
+};
 
-if(bookBtn){
-    bookBtn.addEventListener('click',e=>{
-        e.target.textContent = 'Processing...'
-        console.log('proceesssing')
-        const tourId = e.target.dataset.tourId;
-        bookTour(tourId); 
-    })
+if (bookBtn) {
+  bookBtn.addEventListener("click", (e) => {
+    e.target.textContent = "Processing...";
+    console.log("heeeere")
+    const tourId = e.target.dataset.tourId;
+    bookTour(tourId);
+  });
 }
