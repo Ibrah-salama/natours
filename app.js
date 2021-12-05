@@ -4,16 +4,12 @@ const express = require("express");
 const morgan = require("morgan");
 
 const cookieParser = require("cookie-parser");
-
 const rateLimit = require("express-rate-limit");
-
 const helmet = require("helmet");
-
 const mongoSanitize = require("express-mongo-sanitize");
-
 const xss = require("xss-clean");
-
 const hpp = require("hpp");
+const compression = require('compression')
 
 const app = express();
 app.use(cors());
@@ -52,6 +48,7 @@ app.use(
   })
 );
 
+app.use(compression())
 app.use(helmet());
 
 if (process.env.NODE_ENV === "development") {
