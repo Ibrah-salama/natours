@@ -48,7 +48,7 @@ server, this is the right time to state it.
 
 You can test API via postman using this documentation attached here -> [Postman documentation](https://documenter.getpostman.com/view/14845189/UVJhDaYA)
 
-![Postman documentaton](https://github.com/Ibrah-salama/natours/tree/ibrahim/public/img/postman.png)
+![alt text](./public/img/postman.png)
 
 
 ## Database
